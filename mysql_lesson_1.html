@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>MySQL 101</title>
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/monokai.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+		<style>
+			highlight {
+				color: #99acff;
+			}
+
+			important {
+				color: #5fcd59;
+			}
+
+		</style>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>MySQL 101</h1>
+					<h3>The basics</h3>
+					<p>
+						<small>Created by <a href="https://github.com/AndyBraveMX">Andy Bravo</a></small>
+					</p>
+				</section>
+
+				<section data-background="#aaddff" data-background-transition="zoom">
+					<h2>Hello There</h2>
+					<p>
+						¿Porqué estoy aquí?
+					</p>
+					<p>
+						Para aprender MySQL 
+					</p>
+
+
+				</section>
+
+				<!-- Example of nested vertical slides -->
+				<section>
+					<section>
+						<h2>¿Qué es <highlight>MySQL</highlight>?</h2>
+						<p>Un gestor de base de datos <highlight>relacional</highlight> Open Source desarrollado por Sun Microsystems en 1995</p>
+						<br><br>
+						<p> My -> Maria (Nombre de la hija del creador)</p>
+						<p> SQL -> SQL</p>
+					</section>
+					<section>
+						<h2>Rela... qué?</h2>
+						<p>Relacional, es decir, que tiene conexiones con otras tablas para formar entidades complejas de información</p>
+						<img src="img/modelo_relacional.jpg"/>
+					</section>
+				</section>
+
+				<section>
+
+					<section>
+						<h1>Lenguaje <highlight>SQL</highlight></h1>
+						<h5>(Structured Query Language)</h5>
+						<p>Es un lenguaje de programación usado para la <important>inserción</important> de datos, <important>consultas</important>, <important>actualizaciones</important> y <important>borrado</important>.</p>
+						<p>Inventado en 1970 por Edgar Frank Codd</p>
+					</section>
+
+					<section>
+						<p>Oiga profe qué necesito saber para usar SQL?</p>
+						<p class="fragment">álgebra relacional</p>
+						<p><span class="fragment">cálculo relacional</span> <span class="fragment"> y  teoría de conjuntos</span> <span class="fragment"> <br><br><br><important>nada más</important>.</span></p>						<aside class="notes">							This slide has fragments which are also stepped through in the notes window.						</aside>
+					</section>
+
+					<section>
+						<img src="img/neo.jpg"/>
+					</section>
+				</section>
+
+				<section>
+					<h3><highlight>Organización de los datos</highlight></h3>
+					<p>
+					Base de datos <highlight>></highlight> Tablas <highlight>></highlight> Columnas <highlight>></highlight> Renglones <highlight>></highlight> Registros
+					<p>
+				</section>
+
+				<section data-background="https://media.giphy.com/media/3oKIPnAiaMCws8nOsE/giphy.gif" data-background-size="70%">
+					<h2>Let's go code!</h2>
+				</section>
+
+				<section>
+					<h2>Instalar MySQL</h2>
+					<ol>
+						<li>Descargue el instalador correspondiente a su equipo</li>
+						<li>Descargue SQuirreL (cliente manejador de bd)</li>
+						<li>Configure JAR</li>
+						<li>Cree la conexión a:</li>
+					</ol>
+					<img src="img/config.jpg"/>
+				</section>
+
+				<section>
+					<h3>Cree su primera BD</h3>
+	<pre><code class="hljs sql">create database mibase;
+use mibase;</code></pre>
+
+<h3>Cree su primera tabla</h3>
+	<pre><code class="hljs sql">CREATE TABLE saludos (
+	id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	texto VARCHAR(30) NOT NULL
+);
+
+INSERT INTO saludos (texto) VALUES ('Hola');</code></pre>
+
+<h3>Ejecute su primer consulta</h3>
+	<pre><code class="hljs sql">SELECT texto FROM saludos;</code></pre>
+					
+				</section>
+<section>
+	<p>Acordeón</p>
+	<pre><code class="hljs sql">--SELECTS
+SELECT columna1, columna2, ..., columnaN FROM tabla1, tabla2, ... tablaN WHERE condicion1 AND/OR condicion2
+
+--Inserts
+INSERT INTO tabla (columna1, columna2, ..., columnaN) VALUES (valor1, valor2, ..., valorN)
+</code></pre>
+</section>
+
+			<section>
+				<section>
+					<h2>Ejercicio</h2>
+					<p>Cree la siguiente tabla:</p>
+					<pre><code class="hljs sql">CREATE TABLE personas (
+		id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+		nombre VARCHAR(30) NOT NULL
+	)</code></pre>
+	<p>Inserte cinco nombres diferentes en la tabla personas.</p> <p>Salude a cada una de las personas. </p>
+					<table>
+						<thead>
+							<tr>
+								<th>texto</th>
+								<th>nombre</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Hola</td>
+								<td>Andy</td>
+							</tr>
+							<tr>
+								<td>Hola</td>
+								<td>Andres</td>
+							</tr>
+						</tbody>
+					</table>
+
+				</section>
+				<section>
+					<p> Inserte el siguiente registro en la tabla saludos</p>
+					<pre><code class="hljs sql">INSERT INTO saludos (texto) VALUES ('Hello')</code></pre>
+					<br><br>
+					<p> Como somos bilingües, salude en inglés (solo en inglés) a todas las personas</p>
+				</section>
+			</section>
+
+			<section data-background="https://media.giphy.com/media/JQQwgVUMDIyAM/giphy.gif" data-background-size="70%">
+				
+			</section>
+			</div>
+
+		</div>
+
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				center: true,
+				hash: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true },
+					{ src: 'plugin/search/search.js', async: true },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
