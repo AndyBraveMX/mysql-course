@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>MySQL 101</title>
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/monokai.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+		<style>
+			highlight {
+				color: #99acff;
+			}
+
+			important {
+				color: #5fcd59;
+			}
+
+		</style>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+				<section>
+					<img src="img/logo_ingenieria.png" alt="Smiley face" height="350" width="350">
+				
+					<h1>MySQL 101</h1>
+					<h3>Clase 2 Queries con Filtros</h3>
+					<div class="text-animation-wrapper">
+							<p class="text-animation">We work with Java</p>
+					</div>
+				</section>
+
+				<section>
+					<section>
+						<h2><highlight>RECORDATORIO</highlight></h2>
+						<pre><code class="hljs sql">
+-- SINTAXIS DE SELECTS
+SELECT t.columna1, t.columna2, t.columna3 FROM tabla t WHERE condicion;</code></pre>
+					</section>
+					<section>
+						<p>La base que usaremos </p>
+						<img src="img/base_datos.png"/>
+					</section>
+					<section>
+						<h2>Preparación. </h2>
+						<p>Importe la Siguiente BD.</p>
+
+						<ol>
+							<li>Abra MySQL Workbench</li>
+							<li>Liste las bases de datos: <important>show databases;</important></li>
+							<li>Use la base de datos creada: <important>use xsfRERFdc</important></li>
+							<li>Copie el contenido del script clase2.sql en el editor</li>
+							<li>Ejecute el script</li>
+							<li>Verifique que las tablas se hayan creado: <important>show tables</important> </li>
+						</ol>
+					</section>
+					<section>
+						<p> <highlight>Ejercicio</highlight>: Haga un select con todos los campos de la tabla productos </p>
+						<p> Consejo: para ver como se llaman las columnas use: <important>DESCRIBE nombre_tabla</important> </p>
+					</section>
+					<section>
+							SOLUCIÓN: 
+							<pre><code class="hljs sql">
+SELECT idProducto, nombreproducto, detalle, escala, 
+fabricante, descripcion, stock, precio, precioSugerido 
+FROM productos;
+
+--Solución corta (Operador *)
+SELECT * FROM productos;
+</code></pre>
+					</section>
+					<section>
+						<p>Mostrar los resultados ordenados por cierta columna</p>
+						<pre><code class="hljs sql">
+SELECT t.columna1 FROM tabla t ORDER BY columna ASC/DESC;
+</code></pre>
+<p>Ordene los nombres de los empleados en orden ascendente: </p>
+<pre><code class="hljs sql">
+SELECT nombreEmpleado FROM empleados 
+ORDER BY nombreEmpleado ASC;
+</code></pre>
+					</section>
+					<section>
+						<p>Y si quiero un orden específico? </p>
+							<pre><code class="hljs sql">
+-- ORDEN DE LAS COLUMNAS EN UN ORDEN QUE YO DEFINO
+SELECT * FROM compras ORDER BY field(status,
+		'In Process',
+        'On Hold',
+        'Cancelled',
+        'Resolved',
+        'Disputed',
+        'Shipped');
+</code></pre>
+					</section>
+
+					<section>
+						<p> MySQL también puede hacer cálculos por ti: </p>
+						<pre><code class="hljs sql">
+-- OPERACIONES ARITMÉTICAS
+SELECT idcompra, cantidad * precio 
+FROM detalles_compra;
+						</code></pre>
+					</section>
+					<section>
+						<p>Y si quiero un nombre más decente para mi resultado: </p>
+						<pre><code class="hljs sql">
+-- PRESENTACION DE LAS COLUMNAS
+SELECT idcompra, cantidad * precio as subtotal 
+FROM detalles_compra;
+						</code></pre>
+					</section>
+				</section>
+				<section data-background="https://media.giphy.com/media/3o85xmXTiPM4OCilcQ/giphy.gif">
+						<H2> FILTROS</h2>
+				</section>
+				<section>
+					<section>
+						<h2>Ejercicio </h2>
+						<p>SELECCIONE los empleados que sean representantes de ventas (Sales Rep) muéstrelos ordenados por apellido, <important>HINT: use where</important></p>
+						<pre><code class="hljs sql">
+SELECT * FROM empleados 
+WHERE puesto = 'Sales Rep' 
+ORDER BY apellidoEmpleado;
+						</code></pre>
+					</section>
+					<section>
+						<p> ¿PUEDO PONER MÁS DE UNA CONDICIÓN? </p>
+						<p><important>SÍ, USE AND</important></p>
+						<p>Seleccione los empleados que sean representantes de ventas (Sales Rep) Y su oficina sea 1 muéstrelos ordenados por apellido</p>
+						<pre><code class="hljs sql">
+SELECT * FROM empleados 
+WHERE puesto='sales rep' AND idoficina = 1 
+ORDER BY apellidoEmpleado;
+						</code></pre>
+					</section>
+					<section>
+						<p> ¿Y si quiero dos condiciones? </p>
+						<p>Use OR</p>
+						<p>Seleccione los empleados que sean representantes de ventas (Sales Rep) <highlight>O</highlight> Directores de ventas (VP Sales)</p>
+						<pre><code class="hljs sql">
+SELECT * FROM empleados 
+WHERE puesto = 'Sales Rep' OR puesto = 'VP Sales';
+						</code></pre>
+					</section>
+
+
+					<section>
+						<h2>EJERCICIO 1: </h2>
+						<p>Seleccione todos los empleados de las oficinas 1, 2 y 3</p>
+						<pre><code class="hljs sql">
+SELECT * FROM empleados 
+WHERE idoficina=1 OR idoficina=2 OR idoficina=3;
+
+--Otra forma
+SELECT * FROM empleados WHERE idoficina IN (1,2,3);
+
+						</code></pre>
+					</section>
+
+					<section>
+						<h2>EJERCICIO 2: </h2>
+						<p>Seleccione los empleados que sean representantes de ventas <important>o</important> directores de ventas <important>y</important> que sean de la oficina 1</p>
+						<pre><code class="hljs sql">
+SELECT * FROM empleados 
+WHERE idoficina = 1 AND (puesto= 'VP Sales' OR puesto = 'Sales Rep');
+						</code></pre>
+					</section>
+
+					<section>
+						<p>EL OPERADOR LIKE </p>
+						<p>¿Qué pasa si no recuerdo el nombre, apellido o valor exacto de un campo?</p>
+						<p>El operador <important>LIKE</important> permite hacer búsquedas con un patrón determinado. </p>
+						<p>Like podríamos traducirlo como: "parecido a"
+Ejemplo:</p>
+						<pre><code class="hljs sql">
+-- Empleados cuyo apellido termina en SON							
+SELECT * FROM empleados WHERE apellidoEmpleado LIKE '%son';
+
+-- Empleados cuyo apellido empieza con bo
+SELECT * FROM empleados WHERE apellidoEmpleado LIKE 'bo%';
+
+-- Empleados cuyo apellido tiene la silaba ar
+SELECT * FROM empleados WHERE apellidoEmpleado LIKE '%ar%';
+						</code></pre>
+					</section>
+
+					
+				</section>
+
+				<section>
+					<section>
+						<p>¿Cómo puedo hacer consultas sobre un campo vacío?</p>
+						<p>Use el operador IS NULL </p>
+						<pre><code class="hljs sql">
+SELECT campo FROM tabla WHERE campo IS NULL
+						</code></pre>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<p>Operadores de Comparación</p>
+						<table>
+					    	<thead><tr>
+					            <th>Operador</th>
+					            <th>Uso</th>
+					        </tr></thead>
+					        <tbody>
+						        <tr>
+						            <td>=</td>
+						            <td>Operador de igualdad</td>
+						        </tr>
+						        <tr>
+						            <td><> or !=</td>
+						            <td>Diferente</td>
+						        </tr>
+						        <tr>
+						            <td><</td>
+						            <td>Menor que</td>
+						        </tr> 
+						        <tr>
+						            <td>></td>
+						            <td>Mayor que</td>
+						        </tr>
+						        <tr>
+						            <td><=</td>
+						            <td>Menor o igual que</td>
+						        </tr>
+						        <tr>
+						            <td>>=</td>
+						            <td>Mayor o igual que</td>
+						        </tr>
+					    	</tbody>
+					    </table>
+					</section>
+					<section>
+						<p>
+							Ejemplo.
+Seleccione los productos que su precio sea mayor a 50
+							</p>
+							<pre><code class="hljs sql">
+SELECT * FROM productos WHERE precio > 50;
+						</code></pre>
+
+<p>
+EJERCICIO.
+Seleccione todos los empleados que <important>NO</important> sean ejecutivos de ventas
+</p>
+<pre><code class="hljs sql">
+SELECT * from empleados where puesto <> 'Sales REp';
+
+SELECT * from empleados where puesto  != 'Sales REp';
+						</code></pre>
+					</section>
+				</section>
+
+				<!-- Example of nested vertical slides -->
+				
+
+			<section data-background="https://media.giphy.com/media/JQQwgVUMDIyAM/giphy.gif" data-background-size="70%">
+				
+			</section>
+			</div>
+
+		</div>
+
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				center: true,
+				hash: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true },
+					{ src: 'plugin/search/search.js', async: true },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+		<script src="js/text-animation.js"></script>
+
+	</body>
+</html>

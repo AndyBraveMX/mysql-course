@@ -1,14 +1,19 @@
 <!doctype html>
-<html>
+<html lang="en">
+
 	<head>
 		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+		<title>MySQL 101</title>
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 		<link rel="stylesheet" href="css/reset.css">
 		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/black.css">
+		<link rel="stylesheet" href="css/theme/black.css" id="theme">
 
 		<!-- Theme used for syntax highlighting of code -->
 		<link rel="stylesheet" href="lib/css/monokai.css">
@@ -21,29 +26,263 @@
 			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
 			document.getElementsByTagName( 'head' )[0].appendChild( link );
 		</script>
+		<style>
+			highlight {
+				color: #99acff;
+			}
+
+			important {
+				color: #5fcd59;
+			}
+
+		</style>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
 	</head>
+
 	<body>
+
 		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
+
+				<section>
+					<img src="img/logo_ingenieria.png" alt="Smiley face" height="350" width="350">
+				
+					<h1>MySQL 101</h1>
+					<h3>Clase Final </h3>
+					<div class="text-animation-wrapper">
+							<p class="text-animation">We work with Java</p>
+					</div>
+				</section>
+
+				<section>
+					<h2><highlight>¿Qué aprenderemos hoy?</highlight></h2>
+					<p>Agrupar datos desde diversas tablas</p>
+				</section>
+
+				<section>
+					<h2><highlight>Funciones de fechas</highlight></h2>
+					<p>YEAR(), MONTH(), DAY()</p>
+					<pre><code class="hljs sql">
+SELECT fechaCompra FROM compras;
+
+SELECT YEAR(fechaCompra) from compras;
+</code></pre>
+				</section>
+
+				<section>
+					<section>
+						<p><highlight>JOIN </highlight></p>
+						<p>Un join es un <highlight>método para ligar</highlight> datos de una o varias tablas que tienen columnas en común</p>
+						<img src="img/sql-inner-join.png" />
+					</section>
+					<section>
+						<img src="img/joins.jpg"  height="600" width="800"/>
+					</section>
+					<section>
+						<p>Ejemplo: </p>
+						<p>5. Seleccione todas las compras del cliente 'Australian Collectors, Co.'</p>
+						<pre><code class="hljs sql">
+--Paso 1:
+--Obtener el id del cliente
+Select idCliente from clientes 
+where nombreCliente ='Australian Collectors, Co.'
+
+--Paso 2:
+--Con el id del cliente obtener las compras de la tabla compras
+Select * from compras where idCliente = 114;
+</code></pre>
+
+					</section>
+					<section>
+						<p>Consulta en un solo paso </p>
+						<pre><code class="hljs sql">SELECT co.* FROM compras co
+JOIN clientes cli 
+ON cli.idCliente = co.idCliente
+WHERE cli.nombreCliente = 'Australian Collectors, Co.';
+</code></pre>
+					</section>
+					<section>
+						<p>Version aún más simplificada</p>
+						<p>Si la columna se llama de la misma forma en ambas tablas, podemos usar <highlight>USING</highlight> </p>
+						<pre><code class="hljs sql">SELECT co.* FROM compras co
+JOIN clientes cli 
+USING (idCliente)
+WHERE cli.nombreCliente = 'Australian Collectors, Co.';
+</code></pre>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2><highlight>GROUP BY</highlight></h2>
+						<p>Esta sentencia permite agrupar resultados y consolidarlos en un solo renglón</p>
+						<p>Generalmente se usa con las funciones de agregación (<highlight>SUM(), AVG(), MAX(), MIN(), COUNT()</highlight>) </p>
+					</section>
+					<section>
+						<p>Vamos a contar cuantas compras hay en cada status</p>
+						<pre><code class="hljs sql">SELECT 
+    status, COUNT(*)
+FROM
+    compras
+GROUP BY status;
+</code></pre>
+					</section>
+					<section>
+						<h2>Ejercicio 1: </h2>
+						<p> Obtenga el total de las ganancias obtenidas (precio * cantidad) por cada estatus </p>
+						<p> Pistas: </p>
+						<ul>
+							<li> Debe hacer un select sobre la tabla compras </li>
+							<li> Haga un join con detalles_compra </li>
+							<li> Agrupe por status </li>
+						</ul>
+					</section>
+					<section>
+						<p>Solución</p>
+						<pre><code class="hljs sql">SELECT 
+    status, 
+    SUM(cantidad * precio) AS total
+FROM
+    compras c
+JOIN detalles_compra 
+    d on c.idCompra = d.idCompra
+GROUP BY 
+    status;
+</code></pre>
+					</section>
+				<section>
+					<section>
+						<p>Resultados</p>
+						<table>
+					    	<thead><tr>
+					            <th>Status</th>
+					            <th>Total</th>
+					        </tr></thead>
+					        <tbody>
+						        <tr>
+						            <td>Shipped</td>
+						            <td>8865094.64</td>
+						        </tr>
+						        <tr>
+						            <td>Resolved</td>
+						            <td>134235.88</td>
+						        </tr>
+						        <tr>
+						            <td>Cancelled</td>
+						            <td>238854.18</td>
+						        </tr> 
+						        <tr>
+						            <td>On Hold</td>
+						            <td>169575.61</td>
+						        </tr>
+						        <tr>
+						            <td>Disputed</td>
+						            <td>61158.78</td>
+						        </tr>
+						        <tr>
+						            <td>In Process</td>
+						            <td>135271.52</td>
+						        </tr>
+					    	</tbody>
+					    </table>
+					</section>
+					
+				</section>
+
+			</section>
+
+				<section>
+					<section>
+					<h2>La sentencia <highlight>having</highlight> </h2>
+<p>Se usa para filtrar sobre grupos </p>
+<p>Al query del ejercicio anterior filtre los resultados mayores a 10000</p>
+<pre><code class="hljs sql">SELECT 
+    status, 
+    SUM(cantidad * precio) AS total
+FROM
+    compras c
+JOIN detalles_compra 
+    d on c.idCompra = d.idCompra
+GROUP BY 
+    status
+HAVING total > 100000;
+</code></pre>
+</section>
+<section>
+										<p>Ejercicio</p>
+				<p>Obtenga el total de las compras, agrupadas por año, mayores a 2003 </p>
+				<pre><code class="hljs sql">SELECT 
+    YEAR(fechaCompra) AS anio,
+    SUM(cantidad * precio) AS total
+FROM
+    compras
+INNER JOIN detalles_compra 
+    USING (idCompra)
+GROUP BY 
+    anio
+HAVING 
+    anio > 2003;
+</code></pre>
+	</section>
+
+				</section>
+				<section>
+					<section>
+						<h2>Ejercicio Final </h2>
+						<p>Con una consulta de SQL determine las <highlight>compras</highlight> realizadas por el <highlight>cliente</highlight> "La Rochelle Gifts"</p>
+						<p>en febrero de 2005 </p>
+						<p>El reporte debe detallar: la fecha de compra, la cantidad de articulos comprados, el precio unitario de cada articulo, el nombre del <highlight>producto</highlight> adquirido y la cuenta a pagar por cada artículo</p>
+					</section>
+					<section>
+						<p>Solución </p>
+						<pre><code class="hljs sql">SELECT co.fechacompra, dc.cantidad, dc.precio, 
+p.nombreProducto, (dc.cantidad * dc.precio) as total 
+FROM compras co 
+JOIN clientes cli USING (idcliente)
+JOIN detalles_compra dc USING (idCompra)
+JOIN productos p USING (idProducto)
+WHERE nombreCliente = 'La Rochelle Gifts' 
+AND fechaCompra > '2005-02-01' AND fechaCompra < '2005-02-28';
+</code></pre>
+					</section>
+				</section>
+				
 			</div>
+
 		</div>
 
 		<script src="js/reveal.js"></script>
 
 		<script>
-			// More info about config & dependencies:
-			// - https://github.com/hakimel/reveal.js#configuration
-			// - https://github.com/hakimel/reveal.js#dependencies
+
+			// More info https://github.com/hakimel/reveal.js#configuration
 			Reveal.initialize({
+				controls: true,
+				progress: true,
+				center: true,
+				hash: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
 				dependencies: [
-					{ src: 'plugin/markdown/marked.js' },
-					{ src: 'plugin/markdown/markdown.js' },
-					{ src: 'plugin/notes/notes.js', async: true },
-					{ src: 'plugin/highlight/highlight.js', async: true }
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true },
+					{ src: 'plugin/search/search.js', async: true },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
 				]
 			});
+
 		</script>
+		<script src="js/text-animation.js"></script>
+		<script src="js/snow.js"></script>
+
+
 	</body>
 </html>

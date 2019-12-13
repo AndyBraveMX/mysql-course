@@ -48,12 +48,15 @@
 
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
+
 				<section>
+					<img src="img/logo_ingenieria.png" alt="Smiley face" height="350" width="350">
+				
 					<h1>MySQL 101</h1>
 					<h3>The basics</h3>
-					<p>
-						<small>Created by <a href="https://github.com/AndyBraveMX">Andy Bravo</a></small>
-					</p>
+					<div class="text-animation-wrapper">
+							<p class="text-animation">We work with Java</p>
+					</div>
 				</section>
 
 				<section data-background="#aaddff" data-background-transition="zoom">
@@ -62,10 +65,26 @@
 						¿Porqué estoy aquí?
 					</p>
 					<p>
-						Para aprender MySQL 
+						Para aprender sobre bases de datos con MySQL 
 					</p>
+				</section>
 
-
+				<section>
+					<section>
+						<h2>¿Qué es una <highlight>Base de Datos</highlight>?</h2>
+						<p>Es una colección ordenada y estructurada de información almacenada electrónicamente</p>
+						<p>Esta información es administrada ser usada por software llamado <highlight>Database Management System (DBMS)</highlight></p>
+					</section>
+					<section>
+						<h2>Tipos de bases de datos</h2>
+						<ul>
+							<li>Relacionales</li>
+							<li>No Relacionales (NoSQL)</li>
+							<li>Geográficas</li>
+							<li>Y más...</li>
+						</ul>
+						
+					</section>
 				</section>
 
 				<!-- Example of nested vertical slides -->
@@ -78,7 +97,7 @@
 						<p> SQL -> SQL</p>
 					</section>
 					<section>
-						<h2>Rela... qué?</h2>
+						<h2>¿Qué significa relacional?</h2>
 						<p>Relacional, es decir, que tiene conexiones con otras tablas para formar entidades complejas de información</p>
 						<img src="img/modelo_relacional.jpg"/>
 					</section>
@@ -99,9 +118,7 @@
 						<p><span class="fragment">cálculo relacional</span> <span class="fragment"> y  teoría de conjuntos</span> <span class="fragment"> <br><br><br><important>nada más</important>.</span></p>						<aside class="notes">							This slide has fragments which are also stepped through in the notes window.						</aside>
 					</section>
 
-					<section>
-						<img src="img/neo.jpg"/>
-					</section>
+					
 				</section>
 
 				<section>
@@ -118,12 +135,12 @@
 				<section>
 					<h2>Instalar MySQL</h2>
 					<ol>
-						<li>Descargue el instalador correspondiente a su equipo</li>
-						<li>Descargue SQuirreL (cliente manejador de bd)</li>
-						<li>Configure JAR</li>
-						<li>Cree la conexión a:</li>
+						<li>Descargue el instalador de Workbecnh correspondiente a su equipo <a href="https://dev.mysql.com/downloads/workbench/">https://dev.mysql.com/downloads/workbench/</a></li>
+
+						<li>Cree una cuenta en <a href="https://remotemysql.com/">https://remotemysql.com/</a></li>
+						<li>Configure su cadena de conexión</li>
 					</ol>
-					<img src="img/config.jpg"/>
+					<img src="img/conexion.png"/>
 				</section>
 
 				<section>
@@ -186,7 +203,12 @@ INSERT INTO tabla (columna1, columna2, ..., columnaN) VALUES (valor1, valor2, ..
 					<p> Inserte el siguiente registro en la tabla saludos</p>
 					<pre><code class="hljs sql">INSERT INTO saludos (texto) VALUES ('Hello')</code></pre>
 					<br><br>
-					<p> Como somos bilingües, salude en inglés (solo en inglés) a todas las personas</p>
+					<p> Como somos bilingües, salude en inglés <highlight>(solo en inglés)</highlight> a todas las personas</p>
+				</section>
+				<section>
+					<H2> Solución</H2>
+					<pre><code class="hljs sql">SELECT texto, nombre FROM saludos, personas WHERE texto = 'Hello';</code></pre>
+
 				</section>
 			</section>
 
@@ -222,6 +244,7 @@ INSERT INTO tabla (columna1, columna2, ..., columnaN) VALUES (valor1, valor2, ..
 			});
 
 		</script>
+		<script src="js/text-animation.js"></script>
 
 	</body>
 </html>
